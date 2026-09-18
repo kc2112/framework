@@ -1,0 +1,14 @@
+{
+  "env": "dev",
+  "endpoints": {
+    "stage-1": "https://stage-1.dev.example.internal",
+    "stage-2": "https://stage-2.dev.example.internal",
+    "stage-3": "https://stage-3.dev.example.internal",
+    "stage-4": "https://stage-4.dev.example.internal",
+    "stage-5": "https://stage-5.dev.example.internal",
+    "stage-6": "https://stage-6.dev.example.internal",
+    "stage-7": "https://stage-7.dev.example.internal"
+  },
+  "connection-arn": "arn:aws:events:us-east-1:123456789012:connection/dev/doc-apis",
+  "rollback-function-arn": "arn:aws:lambda:us-east-1:123456789012:function:document-ingest-rollback-dev"
+}

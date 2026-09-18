@@ -1,0 +1,473 @@
+{
+  "Comment": "stage-1 then parallel stage-2..stage-5, then stage-6, stage-7. rollback is a Lambda. Function names come from stage-map.json Names are stage-n; rollback stays rollback.",
+  "StartAt": "initialize",
+  "States": {
+    "initialize": {
+      "Type": "Pass",
+      "Parameters": {
+        "originalEvent.$": "$",
+        "results": {}
+      },
+      "Next": "stage-1"
+    },
+    "stage-1": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::http:invoke",
+      "Parameters": {
+        "ApiEndpoint.$": "States.Format('{}/stage-1', $.endpoints['stage-1'])",
+        "Method": "POST",
+        "Headers": {
+          "content-type": "application/json"
+        },
+        "RequestBody.$": "$.originalEvent",
+        "InvocationConfig": {
+          "ConnectionArn.$": "$.connectionArn"
+        }
+      },
+      "ResultSelector": {
+        "Payload.$": "$.ResponseBody"
+      },
+      "ResultPath": "$.results['stage-1']",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "rollback"
+        }
+      ],
+      "Next": "parallel-store-writes"
+    },
+    "parallel-store-writes": {
+      "Type": "Parallel",
+      "Comment": "stage-2, stage-3, stage-4, stage-5",
+      "ResultPath": "$.parallelResults",
+      "Branches": [
+        {
+          "StartAt": "stage-2",
+          "States": {
+            "stage-2": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::http:invoke",
+              "Parameters": {
+                "ApiEndpoint.$": "States.Format('{}/stage-2', $.endpoints['stage-2'])",
+                "Method": "POST",
+                "Headers": {
+                  "content-type": "application/json"
+                },
+                "RequestBody.$": "$.originalEvent",
+                "InvocationConfig": {
+                  "ConnectionArn.$": "$.connectionArn"
+                }
+              },
+              "ResultSelector": {
+                "function": "stage-2",
+                "stage": "stage-2",
+                "status": "SUCCEEDED",
+                "result.$": "$.ResponseBody"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "States.TaskFailed"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2.0
+                }
+              ],
+              "Catch": [
+                {
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
+                  "ResultPath": "$.error",
+                  "Next": "stage-2-failed"
+                }
+              ],
+              "End": true
+            },
+            "stage-2-failed": {
+              "Type": "Pass",
+              "Parameters": {
+                "function": "stage-2",
+                "stage": "stage-2",
+                "status": "FAILED",
+                "error.$": "$.error"
+              },
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "stage-3",
+          "States": {
+            "stage-3": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::http:invoke",
+              "Parameters": {
+                "ApiEndpoint.$": "States.Format('{}/stage-3', $.endpoints['stage-3'])",
+                "Method": "POST",
+                "Headers": {
+                  "content-type": "application/json"
+                },
+                "RequestBody.$": "$.originalEvent",
+                "InvocationConfig": {
+                  "ConnectionArn.$": "$.connectionArn"
+                }
+              },
+              "ResultSelector": {
+                "function": "stage-3",
+                "stage": "stage-3",
+                "status": "SUCCEEDED",
+                "result.$": "$.ResponseBody"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "States.TaskFailed"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2.0
+                }
+              ],
+              "Catch": [
+                {
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
+                  "ResultPath": "$.error",
+                  "Next": "stage-3-failed"
+                }
+              ],
+              "End": true
+            },
+            "stage-3-failed": {
+              "Type": "Pass",
+              "Parameters": {
+                "function": "stage-3",
+                "stage": "stage-3",
+                "status": "FAILED",
+                "error.$": "$.error"
+              },
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "stage-4",
+          "States": {
+            "stage-4": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::http:invoke",
+              "Parameters": {
+                "ApiEndpoint.$": "States.Format('{}/stage-4', $.endpoints['stage-4'])",
+                "Method": "POST",
+                "Headers": {
+                  "content-type": "application/json"
+                },
+                "RequestBody.$": "$.originalEvent",
+                "InvocationConfig": {
+                  "ConnectionArn.$": "$.connectionArn"
+                }
+              },
+              "ResultSelector": {
+                "function": "stage-4",
+                "stage": "stage-4",
+                "status": "SUCCEEDED",
+                "result.$": "$.ResponseBody"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "States.TaskFailed"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2.0
+                }
+              ],
+              "Catch": [
+                {
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
+                  "ResultPath": "$.error",
+                  "Next": "stage-4-failed"
+                }
+              ],
+              "End": true
+            },
+            "stage-4-failed": {
+              "Type": "Pass",
+              "Parameters": {
+                "function": "stage-4",
+                "stage": "stage-4",
+                "status": "FAILED",
+                "error.$": "$.error"
+              },
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "stage-5",
+          "States": {
+            "stage-5": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::http:invoke",
+              "Parameters": {
+                "ApiEndpoint.$": "States.Format('{}/stage-5', $.endpoints['stage-5'])",
+                "Method": "POST",
+                "Headers": {
+                  "content-type": "application/json"
+                },
+                "RequestBody.$": "$.originalEvent",
+                "InvocationConfig": {
+                  "ConnectionArn.$": "$.connectionArn"
+                }
+              },
+              "ResultSelector": {
+                "function": "stage-5",
+                "stage": "stage-5",
+                "status": "SUCCEEDED",
+                "result.$": "$.ResponseBody"
+              },
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "States.TaskFailed"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 3,
+                  "BackoffRate": 2.0
+                }
+              ],
+              "Catch": [
+                {
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
+                  "ResultPath": "$.error",
+                  "Next": "stage-5-failed"
+                }
+              ],
+              "End": true
+            },
+            "stage-5-failed": {
+              "Type": "Pass",
+              "Parameters": {
+                "function": "stage-5",
+                "stage": "stage-5",
+                "status": "FAILED",
+                "error.$": "$.error"
+              },
+              "End": true
+            }
+          }
+        }
+      ],
+      "Next": "merge-parallel"
+    },
+    "merge-parallel": {
+      "Type": "Pass",
+      "Parameters": {
+        "originalEvent.$": "$.originalEvent",
+        "connectionArn.$": "$.connectionArn",
+        "endpoints.$": "$.endpoints",
+        "rollbackFunctionArn.$": "$.rollbackFunctionArn",
+        "results": {
+          "stage-1.$": "$.results['stage-1']",
+          "stage-2.$": "$.parallelResults[0]",
+          "stage-3.$": "$.parallelResults[1]",
+          "stage-4.$": "$.parallelResults[2]",
+          "stage-5.$": "$.parallelResults[3]"
+        }
+      },
+      "Next": "check-parallel"
+    },
+    "check-parallel": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "And": [
+            {
+              "Variable": "$.results['stage-2'].status",
+              "StringEquals": "SUCCEEDED"
+            },
+            {
+              "Variable": "$.results['stage-3'].status",
+              "StringEquals": "SUCCEEDED"
+            },
+            {
+              "Variable": "$.results['stage-4'].status",
+              "StringEquals": "SUCCEEDED"
+            },
+            {
+              "Variable": "$.results['stage-5'].status",
+              "StringEquals": "SUCCEEDED"
+            }
+          ],
+          "Next": "stage-6"
+        }
+      ],
+      "Default": "rollback"
+    },
+    "stage-6": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::http:invoke",
+      "Parameters": {
+        "ApiEndpoint.$": "States.Format('{}/stage-6', $.endpoints['stage-6'])",
+        "Method": "POST",
+        "Headers": {
+          "content-type": "application/json"
+        },
+        "RequestBody.$": "$.originalEvent",
+        "InvocationConfig": {
+          "ConnectionArn.$": "$.connectionArn"
+        }
+      },
+      "ResultSelector": {
+        "Payload.$": "$.ResponseBody"
+      },
+      "ResultPath": "$.results['stage-6']",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "rollback"
+        }
+      ],
+      "Next": "stage-7"
+    },
+    "stage-7": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::http:invoke",
+      "Parameters": {
+        "ApiEndpoint.$": "States.Format('{}/stage-7', $.endpoints['stage-7'])",
+        "Method": "POST",
+        "Headers": {
+          "content-type": "application/json"
+        },
+        "RequestBody": {
+          "originalEvent.$": "$.originalEvent",
+          "results.$": "$.results"
+        },
+        "InvocationConfig": {
+          "ConnectionArn.$": "$.connectionArn"
+        }
+      },
+      "ResultSelector": {
+        "Payload.$": "$.ResponseBody"
+      },
+      "ResultPath": "$.results['stage-7']",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "rollback"
+        }
+      ],
+      "Next": "mark-success"
+    },
+    "mark-success": {
+      "Type": "Pass",
+      "Parameters": {
+        "ok": true,
+        "originalEvent.$": "$.originalEvent",
+        "results.$": "$.results"
+      },
+      "Next": "finalize"
+    },
+    "rollback": {
+      "Type": "Task",
+      "Comment": "Lambda compensating transaction.",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName.$": "$.rollbackFunctionArn",
+        "Payload.$": "$"
+      },
+      "ResultSelector": {
+        "Payload.$": "$.Payload"
+      },
+      "ResultPath": "$.rollbackResult",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.rollbackError",
+          "Next": "mark-failure"
+        }
+      ],
+      "Next": "mark-failure"
+    },
+    "mark-failure": {
+      "Type": "Pass",
+      "Parameters": {
+        "ok": false,
+        "originalEvent.$": "$.originalEvent",
+        "results.$": "$.results",
+        "state.$": "$"
+      },
+      "Next": "finalize"
+    },
+    "finalize": {
+      "Type": "Pass",
+      "Comment": "Single exit. In AWS this can stay a Lambda; locally the runner shapes the body.",
+      "Next": "done"
+    },
+    "done": {
+      "Type": "Succeed"
+    }
+  }
+}

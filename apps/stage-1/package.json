@@ -1,0 +1,10 @@
+{
+  "name": "@doc-ingest/stage-1",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@doc-ingest/express-app": "*",
+    "express": "*"
+  }
+}

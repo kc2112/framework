@@ -1,0 +1,15 @@
+{
+  "app-env": "local",
+  "name": "document-ingest",
+  "endpoints": {
+    "stage-1": "http://127.0.0.1:3001",
+    "stage-2": "http://127.0.0.1:3002",
+    "stage-3": "http://127.0.0.1:3003",
+    "stage-4": "http://127.0.0.1:3004",
+    "stage-6": "http://127.0.0.1:3005",
+    "stage-7": "http://127.0.0.1:3006",
+    "stage-5": "http://127.0.0.1:3007"
+  },
+  "connection-arn": null,
+  "rollback-function-arn": null
+}

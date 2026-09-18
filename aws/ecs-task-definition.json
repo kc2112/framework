@@ -1,0 +1,40 @@
+{
+  "family": "stepfn-express-api",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "runtimePlatform": {
+    "operatingSystemFamily": "LINUX",
+    "cpuArchitecture": "X86_64"
+  },
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "api",
+      "image": "ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/stepfn-express-apis:catalog",
+      "essential": true,
+      "portMappings": [
+        { "containerPort": 3000, "protocol": "tcp" },
+        { "containerPort": 9229, "protocol": "tcp" }
+      ],
+      "environment": [
+        { "name": "PORT", "value": "3000" },
+        { "name": "SERVICE", "value": "catalog" },
+        { "name": "DEBUG", "value": "0" }
+      ],
+      "linuxParameters": {
+        "initProcessEnabled": true
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/stepfn-express-apis",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "api"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@doc-ingest/express-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/app.js",
+    "./listen": "./src/listen.js"
+  },
+  "dependencies": {
+    "express": "*"
+  }
+}

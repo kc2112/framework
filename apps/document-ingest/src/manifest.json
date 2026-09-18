@@ -1,0 +1,20 @@
+{
+  "name": "document-ingest",
+  "state-machine-file": "document-ingest.asl.json",
+  "parallel": [
+    "stage-2",
+    "stage-3",
+    "stage-4",
+    "stage-5"
+  ],
+  "apis": [
+    "stage-1",
+    "stage-2",
+    "stage-3",
+    "stage-4",
+    "stage-5",
+    "stage-6",
+    "stage-7"
+  ],
+  "lambdas": ["rollback"]
+}

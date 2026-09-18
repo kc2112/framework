@@ -1,0 +1,36 @@
+{
+  "name": "stage-5",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/stage-5/src",
+  "projectType": "application",
+  "tags": [
+    "type:app",
+    "scope:api"
+  ],
+  "implicitDependencies": [
+    "express-app"
+  ],
+  "targets": {
+    "serve": {
+      "command": "node apps/stage-5/src/server.js",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "env": {
+          "PORT": "3007"
+        }
+      }
+    },
+    "test": {
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=apps/stage-5 --coverage=false",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "lint": {
+      "command": "eslint apps/stage-5",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

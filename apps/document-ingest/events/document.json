@@ -1,0 +1,15 @@
+{
+  "documentId": "doc-1",
+  "acl": "private",
+  "connectionArn": "arn:aws:events:us-east-1:123456789012:connection/doc-apis/example",
+  "rollbackFunctionArn": "arn:aws:lambda:us-east-1:123456789012:function:document-ingest-rollback",
+  "endpoints": {
+    "stage-1": "https://stage-1.example.internal",
+    "stage-2": "https://stage-2.example.internal",
+    "stage-3": "https://stage-3.example.internal",
+    "stage-4": "https://stage-4.example.internal",
+    "stage-5": "https://stage-5.example.internal",
+    "stage-6": "https://stage-6.example.internal",
+    "stage-7": "https://stage-7.example.internal"
+  }
+}

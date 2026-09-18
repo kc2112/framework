@@ -1,0 +1,109 @@
+{
+  "name": "document-ingest",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/document-ingest/src",
+  "projectType": "application",
+  "tags": [
+    "type:app",
+    "scope:sfn"
+  ],
+  "implicitDependencies": [
+    "config",
+    "stage-1",
+    "stage-2",
+    "stage-3",
+    "stage-4",
+    "stage-5",
+    "stage-6",
+    "stage-7",
+    "rollback"
+  ],
+  "targets": {
+    "serve": {
+      "command": "node apps/document-ingest/src/local-runner.js",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "env": {
+          "APP_ENV": "local"
+        }
+      },
+      "defaultConfiguration": "local",
+      "configurations": {
+        "local": {
+          "env": {
+            "APP_ENV": "local",
+            "NODE_ENV": "development"
+          }
+        },
+        "dev": {
+          "env": {
+            "APP_ENV": "dev",
+            "NODE_ENV": "development"
+          }
+        },
+        "test": {
+          "env": {
+            "APP_ENV": "test",
+            "NODE_ENV": "test"
+          }
+        },
+        "prod": {
+          "env": {
+            "APP_ENV": "prod",
+            "NODE_ENV": "production"
+          }
+        }
+      }
+    },
+    "print-config": {
+      "command": "node -e \"import('@doc-ingest/config').then(async m => console.log(JSON.stringify(await m.loadConfig(process.env.APP_ENV), null, 2)))\"",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "env": {
+          "APP_ENV": "local"
+        }
+      },
+      "defaultConfiguration": "local",
+      "configurations": {
+        "local": {
+          "env": {
+            "APP_ENV": "local"
+          }
+        },
+        "dev": {
+          "env": {
+            "APP_ENV": "dev"
+          }
+        },
+        "test": {
+          "env": {
+            "APP_ENV": "test"
+          }
+        },
+        "prod": {
+          "env": {
+            "APP_ENV": "prod"
+          }
+        }
+      }
+    },
+    "pack": {
+      "command": "node apps/document-ingest/src/pack.js",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "test": {
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=apps/document-ingest --coverage=false",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "lint": {
+      "command": "eslint apps/document-ingest",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

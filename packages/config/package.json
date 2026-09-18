@@ -1,0 +1,9 @@
+{
+  "name": "@doc-ingest/config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/load-config.js"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "config",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/config/src",
+  "projectType": "library",
+  "tags": [
+    "type:lib",
+    "scope:shared"
+  ],
+  "targets": {
+    "test": {
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=packages/config --coverage=false",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "lint": {
+      "command": "eslint packages/config",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

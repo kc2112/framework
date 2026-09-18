@@ -1,0 +1,24 @@
+{
+  "name": "rollback",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/rollback/src",
+  "projectType": "application",
+  "tags": [
+    "type:app",
+    "scope:lambda"
+  ],
+  "targets": {
+    "test": {
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=apps/rollback --coverage=false",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "lint": {
+      "command": "eslint apps/rollback",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

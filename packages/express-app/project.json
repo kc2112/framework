@@ -1,0 +1,24 @@
+{
+  "name": "express-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/express-app/src",
+  "projectType": "library",
+  "tags": [
+    "type:lib",
+    "scope:shared"
+  ],
+  "targets": {
+    "test": {
+      "command": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=packages/express-app --coverage=false",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "lint": {
+      "command": "eslint packages/express-app",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  }
+}

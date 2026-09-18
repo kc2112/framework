@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.test.js",
+      "!{projectRoot}/**/__tests__/**"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/jest.config.js",
+      "{workspaceRoot}/eslint.config.js",
+      "{workspaceRoot}/package.json"
+    ]
+  },
+  "targetDefaults": {
+    "lint": {
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/eslint.config.js"]
+    },
+    "test": {
+      "cache": true,
+      "inputs": ["default", "^production"],
+      "outputs": ["{workspaceRoot}/coverage/{projectName}"]
+    },
+    "serve": {
+      "cache": false
+    },
+    "pack": {
+      "cache": true,
+      "inputs": ["production"],
+      "outputs": ["{workspaceRoot}/dist"]
+    }
+  },
+  "defaultBase": "main",
+  "useInferencePlugins": false,
+  "analytics": false
+}

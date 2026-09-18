@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "orta.vscode-jest",
+    "ryanluker.vscode-coverage-gutters",
+    "ms-azuretools.vscode-docker",
+    "amazonwebservices.aws-toolkit-vscode",
+    "nrwl.angular-console",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig"
+  ]
+}

@@ -1,0 +1,39 @@
+x-api: &api
+  build: { context: . }
+  environment:
+    PORT: "3000"
+    DEBUG: "${DEBUG:-0}"
+    NODE_ENV: "${NODE_ENV:-development}"
+    APP_ENV: "${APP_ENV:-local}"
+
+services:
+  stage-1:
+    <<: *api
+    build: { context: ., args: { SERVICE: stage-1 } }
+    ports: ["3001:3000", "9221:9229"]
+  stage-2:
+    <<: *api
+    build: { context: ., args: { SERVICE: stage-2 } }
+    ports: ["3002:3000", "9222:9229"]
+  stage-3:
+    <<: *api
+    build: { context: ., args: { SERVICE: stage-3 } }
+    ports: ["3003:3000", "9223:9229"]
+  stage-4:
+    <<: *api
+    build: { context: ., args: { SERVICE: stage-4 } }
+    ports: ["3004:3000", "9224:9229"]
+  stage-6:
+    <<: *api
+    build: { context: ., args: { SERVICE: stage-6 } }
+    ports: ["3005:3000", "9225:9229"]
+
+  stage-7:
+    <<: *api
+    build: { context: ., args: { SERVICE: stage-7 } }
+    ports: ["3006:3000", "9226:9229"]
+
+  stage-5:
+    <<: *api
+    build: { context: ., args: { SERVICE: stage-5 } }
+    ports: ["3007:3000", "9227:9229"]

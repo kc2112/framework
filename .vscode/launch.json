@@ -1,0 +1,168 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "vscode-jest-tests.v2",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--watchAll=false",
+        "--testNamePattern",
+        "${jest.testNamePattern}",
+        "--runTestsByPath",
+        "${jest.testFile}"
+      ],
+      "runtimeArgs": ["--experimental-vm-modules"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true
+    },
+    {
+      "name": "Jest: current file",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "args": ["--runInBand", "--coverage=false", "${relativeFile}"],
+      "runtimeArgs": ["--experimental-vm-modules"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "API: stage-1",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/stage-1/src/server.js",
+      "env": { "PORT": "3001" },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "API: stage-2",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/stage-2/src/server.js",
+      "env": { "PORT": "3002" },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "API: stage-3",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/stage-3/src/server.js",
+      "env": { "PORT": "3003" },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "API: stage-4",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/stage-4/src/server.js",
+      "env": { "PORT": "3004" },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "API: stage-6",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/stage-6/src/server.js",
+      "env": { "PORT": "3005" },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "API: stage-5",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/stage-5/src/server.js",
+      "env": { "PORT": "3007" },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Attach: stage-5 :9227",
+      "type": "node",
+      "request": "attach",
+      "address": "127.0.0.1",
+      "port": 9227,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "API: stage-7",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/stage-7/src/server.js",
+      "env": { "PORT": "3006" },
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Attach: stage-7 :9226",
+      "type": "node",
+      "request": "attach",
+      "address": "127.0.0.1",
+      "port": 9226,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Attach: stage-1 :9221",
+      "type": "node",
+      "request": "attach",
+      "address": "127.0.0.1",
+      "port": 9221,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Attach: stage-2 :9222",
+      "type": "node",
+      "request": "attach",
+      "address": "127.0.0.1",
+      "port": 9222,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Attach: stage-3 :9223",
+      "type": "node",
+      "request": "attach",
+      "address": "127.0.0.1",
+      "port": 9223,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Attach: stage-4 :9224",
+      "type": "node",
+      "request": "attach",
+      "address": "127.0.0.1",
+      "port": 9224,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Attach: stage-6 :9225",
+      "type": "node",
+      "request": "attach",
+      "address": "127.0.0.1",
+      "port": 9225,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Step Function: local runner",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/apps/document-ingest/src/local-runner.js",
+      "args": ["doc-1"],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

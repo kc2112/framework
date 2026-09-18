@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+dist/
+.nx/cache
+.nx/workspace-data
+*.log
+.DS_Store
+index.zip
+step-function-*.zip

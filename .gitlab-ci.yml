@@ -1,0 +1,86 @@
+# Tests on every pipeline. Coverage threshold fails only on main.
+# package job versions the Step Functions definition as
+# dist/document-ingest-$CI_COMMIT_SHORT_SHA.zip (GitLab artifact).
+
+stages:
+  - test
+  - package
+
+default:
+  image: node:22-bookworm
+  interruptible: true
+
+variables:
+  npm_config_audit: "false"
+  npm_config_fund: "false"
+  COVERAGE_THRESHOLD: '{"global":{"branches":70,"functions":80,"lines":80,"statements":80}}'
+
+cache:
+  key:
+    files:
+      - package-lock.json
+      - package.json
+  paths:
+    - node_modules/
+
+.test:
+  stage: test
+  before_script:
+    - |
+      if [ -f package-lock.json ]; then npm ci; else npm install; fi
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    when: always
+    expire_in: 7 days
+    paths:
+      - coverage/
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+
+test:
+  extends: .test
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: never
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: on_success
+  script:
+    - npx nx run-many -t lint
+    - npx nx run-many -t test
+    - npm run test:coverage
+
+test:main:
+  extends: .test
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - npx nx run-many -t lint
+    - npx nx run-many -t test
+    - npm run test:coverage -- --coverageThreshold="$COVERAGE_THRESHOLD"
+
+package:
+  stage: package
+  needs:
+    - job: test
+      optional: true
+    - job: test:main
+      optional: true
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq zip
+  script:
+    - export SFN_VERSION="${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}"
+    - npm run pack:sfn
+    - test -f "dist/document-ingest-${SFN_VERSION}.zip"
+  artifacts:
+    name: "document-ingest-$CI_COMMIT_SHORT_SHA"
+    expire_in: 30 days
+    paths:
+      - dist/document-ingest-*.zip
+      - dist/document-ingest-*.json

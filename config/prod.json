@@ -1,0 +1,14 @@
+{
+  "env": "prod",
+  "endpoints": {
+    "stage-1": "https://stage-1.example.com",
+    "stage-2": "https://stage-2.example.com",
+    "stage-3": "https://stage-3.example.com",
+    "stage-4": "https://stage-4.example.com",
+    "stage-5": "https://stage-5.example.com",
+    "stage-6": "https://stage-6.example.com",
+    "stage-7": "https://stage-7.example.com"
+  },
+  "connection-arn": "arn:aws:events:us-east-1:123456789012:connection/prod/doc-apis",
+  "rollback-function-arn": "arn:aws:lambda:us-east-1:123456789012:function:document-ingest-rollback-prod"
+}
